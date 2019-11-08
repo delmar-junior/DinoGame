@@ -19,12 +19,20 @@ public class GameManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+
+      Debug.Log("Start:" + SceneManager.GetActiveScene().name);
+      currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
         
     }
 
     // Update is called once per frame
     void Update() { 
         
+    }
+
+    void Awake()
+    {
+        Debug.Log("Awake:" + SceneManager.GetActiveScene().name);
     }
 
     public void AddLife(int value) {
@@ -44,7 +52,7 @@ public class GameManager : MonoBehaviour {
         gameMenu.SetActive(false);
         gameHud.SetActive(true);
 
-        currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
+        // currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
 
     }
 
@@ -57,7 +65,13 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PassLvl2() {
-        SceneManager.LoadScene("Level2");
+      Destroy(currentPlayer);
+        SceneManager.LoadScene("Level3");
+    }
+
+    public void PassLvl3() {
+      Destroy(currentPlayer);
+        SceneManager.LoadScene("Level3");
     }
 
 }

@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "DeathBur" || collider.tag == "DeathBase") {
             dead = true;
             deaded = 0;
+            // Destroy(gameObject);
         }
 
         if (collider.tag == "PlataformaMovel") {
@@ -85,6 +86,10 @@ public class PlayerController : MonoBehaviour
 
         if (collider.tag == "PassLvl2") {
             manager.PassLvl2();
+        }
+
+        if (collider.tag == "PassLvl3") {
+            manager.PassLvl3();
         }
 
     }
