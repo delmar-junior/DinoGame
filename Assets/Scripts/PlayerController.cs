@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private float jumpVelocity = 9.0f;
     private float fallMultiplier = 2.5f;
     private float lowJumpMultiplier = 2f;
+    private int countJump = 0;
+    private int maxJump = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -30,22 +32,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (deaded == 35) {
             manager.AddLife(-1);
         }
 
         walking = false;
         jumping = false;
-        if (Input.GetKeyUp(KeyCode.Space)) {
-            customRigidBody.velocity = Vector2.up * jumpVelocity;
-            // customRigidBody.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
-            jumping = true;
+
+        Debug.Log("Pulo:" + customRigidBody.velocity.y);
+
+        if (customRigidBody.velocity.y == 0) {
+            countJump = 0;
         }
+        
+        if (Input.GetKeyUp(KeyCode.Space)) {
+            // customRigidBody.AddForce(Vector2.up * 4, ForceMode2D.Impulse);
+            countJump += 1;
+            if (countJump <= maxJump) {
+                customRigidBody.velocity = Vector2.up * jumpVelocity;
+                jumping = true;
+            }
+        }
+        
         if (customRigidBody.velocity.y < 0) {
                 customRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             } else if (customRigidBody.velocity.y > 0 && !Input.GetKeyUp(KeyCode.Space)) {
                 customRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+                jumping = true;
             }
+
         if (Input.GetKey(KeyCode.A)) {
             FlipPlayerLeft();
             WalkPlayerLeft();
@@ -58,6 +74,10 @@ public class PlayerController : MonoBehaviour
 
         if (dead == true) {
             deaded += 1;
+        }
+
+        if (deaded == 1) {
+            manager.DeathSound();
         }
 
         anim.SetBool("walking", walking);
@@ -90,6 +110,10 @@ public class PlayerController : MonoBehaviour
 
         if (collider.tag == "PassLvl3") {
             manager.PassLvl3();
+        }
+
+        if (collider.tag == "FinishGame") {
+            manager.FinishGame();
         }
 
     }

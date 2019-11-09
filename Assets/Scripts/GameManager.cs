@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
     public GameObject gameHud;
     public GameObject gameMenu;
     public GameObject playerPlaceholder;
+    public AudioSource levelSound;
+    public AudioSource deathSound;
 
     private GameObject currentPlayer;
 
@@ -21,8 +23,9 @@ public class GameManager : MonoBehaviour {
     void Start() {
 
       Debug.Log("Start:" + SceneManager.GetActiveScene().name);
-      currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
-        
+      if (SceneManager.GetActiveScene().name != "Level1") {
+          currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
+      }  
     }
 
     // Update is called once per frame
@@ -52,8 +55,8 @@ public class GameManager : MonoBehaviour {
         gameMenu.SetActive(false);
         gameHud.SetActive(true);
 
-        // currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
-
+        currentPlayer = Instantiate(playerPrefab, playerPlaceholder.transform.position, Quaternion.identity);
+        levelSound.Play();
     }
 
     public void QuitGame() {
@@ -65,13 +68,22 @@ public class GameManager : MonoBehaviour {
     }
 
     public void PassLvl2() {
-      Destroy(currentPlayer);
-        SceneManager.LoadScene("Level3");
+        Destroy(currentPlayer);
+        SceneManager.LoadScene("Level2");
     }
 
     public void PassLvl3() {
-      Destroy(currentPlayer);
+        Destroy(currentPlayer);
         SceneManager.LoadScene("Level3");
+    }
+
+    public void FinishGame() {
+        Destroy(currentPlayer);
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void DeathSound() {
+        deathSound.Play();
     }
 
 }
